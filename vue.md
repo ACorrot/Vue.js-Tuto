@@ -2,7 +2,7 @@
 
 On va créer, dans le js, un objet de type `Vue`. Exemple :
 
-``
+```js
 let app = new Vue({
     el: '#app',
     data: {
@@ -14,22 +14,25 @@ let app = new Vue({
     }
 })
 
-``
+```
 
 Cibler un élément, par ex un id, comme #app
 Ensuite, data sera le contenu de cette div, et nous créons une clef, comme ``product`` qui aura pour valeur ``Socks``. Dans le HTML, on ``{{ product }}`` en étant dans #app, et ça affichera la clef.
 
 Pour une image, le src={{test}} ne fonctionne pas. On va créer une clef image et une valeur dans le js, puis en front on va utiliser ``v-bind:src="la clef"``, et bingo.
-Note : On peut utiliser ``v-bind:src="mdr"`` ou ``:src="mdr"`` pour faire plus court
+Note : On peut utiliser ``v-bind:src="le lien"`` ou ``:src="le lien"`` pour faire plus court
 
 
 Possibilité de faire des conditons, comme :
 ``inventory: 100``
-Et
+
+Et :
+```html
 <p v-if="inventory > 10">En stock</p>
 <p v-else>Rupture</p>
 Cela fera apparaître uniquement le "En stock", on peut même rajouter...
 <p v-else-if="inventory <= 10 && inventory > 0">Almost out of stock !!!</p>
+```
 ...qui aura pour effet d'afficher que le produit est presque en rupture quand on arrive en-dessous de 10
 
 Si on veut montrer une seule chose, comme le "en stock", on peut utiliser ``v-show`` et passer cet élément en ``true``. S'il est passé en ``false``, il sera display:none;.
@@ -37,13 +40,17 @@ Si on veut montrer une seule chose, comme le "en stock", on peut utiliser ``v-sh
 Pour le foreach :
 
 ``details: ["80 cotton", "20% polyester", "Gender-neutral"]``
+
+```html
 <ul>
     <li v-for="detail in details">{{ detail }}</li>
 </ul>
+```
 
 ## Pour des objects :
 
-``variants: [
+```js
+variants: [
     {
         variantID: 1,
         variantColor: "green"
@@ -52,25 +59,33 @@ Pour le foreach :
         variandID: 2,
         variantColor: "red"
     }
-]``
+]
+```
+
+```html
 <div v-for="variant in variants" :key="variant.variantID">{{ variant.variantColor }}</div>
+```
 Le fait de mettre une :key avec le variantID nous permettra d'avoir leur index dans la partie Vue de l'inspecteur.
 
 ## Partie event Listeners :
 
 Pour faire un onclick, on peut faire ``v-on:click="la fonction"`` ou alors :
+```html
 <button @click="addToCart">Add to cart</button>
 <div class="cart">
     <p>Cart({{ cart }})</p>
 </div>
+```
 
+```html
 <div v-for="variant in variants" :key="variant.variantID">
     <p @mouseover="variantProduct(variant.variantImage)">{{ variant.variantColor }}</p>
 </div>
-
+```
 En dehors de la partie ``data`` de Vue, on va faire ceci :
 
-``methods: {
+```js
+methods: {
 
     // au clic, fait +1 au compteur <p> qui s'appelle {{ cart }}
     addToCart() {
@@ -81,7 +96,8 @@ En dehors de la partie ``data`` de Vue, on va faire ceci :
     variantProduct(variantImage) {
         this.image = variantImage
     }
-}``
+}
+```
 
 Il existe même ``@submit``, ``@keyup``, etc
 
@@ -94,12 +110,14 @@ Appliquer ceci permet d'afficher en tant que background-color les couleurs aux <
 On peut utiliser fontSize par exemple pour la font-size.
 
 Autre ex plus poussé : 
-``styleObject: {
+```js
+styleObject: {
     color: 'red',
     font-size: '17px'
-}``
+}
+```
 
-Si on fait :style="styleObject', l'élément aura accès à toutes les propriétés de l'object. On peut également faire :style="[styleObject, styleObject2]" pour plusieurs objects différents
+Si on fait ``:style="styleObject'``, l'élément aura accès à toutes les propriétés de l'object. On peut également faire ``:style="[styleObject, styleObject2]"`` pour plusieurs objects différents
 
 On peut donner des classes à des éléments en fonction de conditions également avec :
 
@@ -119,32 +137,39 @@ Il s'agit de fonctions/méthodes qui ne se contentent pas de stocker une valeur,
 On met ça à la suite des ``methods:`` par exemple, et dans ``data:`` lui-même.
 Exemple :
 
-``computed: {
+```js
+computed: {
     title() {
         return this.brand + ' ' + this.product
     }
-}``
+}
+```
 
 Dans le HTMl/Template :
-<h1>{{ title }}</h1>
+```<h1>{{ title }}</h1>```
 
 On peut également faire quelque chose de ce genre :
-``data: {
+```js
+data: {
     premium: true
-}``
+}
+```
 
 Puis :
 
-``computed: {
+```js
+computed: {
     shipping() {
         if(this.premium) {
             return 'Free'
         }
         return 2.99
     }
-}``
+}
+```
 
 Et donc, dans le HTML/Template :
+```html
 <p>Shipping: {{ shipping }}</p>
-
+```
 En bref, ça nous permettra de return pas mal de choses en fonction de certains paramètres (si le stock est présent ou non, etc)
