@@ -149,27 +149,57 @@ Dans le HTMl/Template :
 ```<h1>{{ title }}</h1>```
 
 On peut également faire quelque chose de ce genre :
+
+```js
+computed: {
+    image() {
+        return this.variants[this.selectedVariant].variantImage
+    },
+}
+```
+
+En bref, ça nous permettra de return pas mal de choses en fonction de certains paramètres (si le stock est présent ou non, etc)
+
+## Components
+
+Les components sont très puissants. Ils nous permettent de créer des composants qui eux-même contiennent des composants. Ce sont donc des objects qui sont modulables selon l'envie. Pour en créer un :
+
+```js
+Vue.component('nom du component', {
+    props: {
+        premium: {
+            type: Boolean,
+            required: true
+        }
+    }
+})
+```
+
+On ajoute ensuite la partie 'template', qui viendra s'inscrire dans notre HTML/Template :
+
+```js
+Vue.component('nom-du-component', {
+    props: {
+        premium: {
+            type: Boolean,
+            required: true
+        }
+    }, 
+    template: `
+    <div>
+        <nom-du-component :premium="premium"></nom du component>
+    </div>
+    `
+})
+```
+
+On crée une balise qui portera le même nom que le component créé, comme par exemple 'product'.
+Puis, on retourne dans notre objet ``Vue`` et on inscrit notre ``premium`` à l'intérieur, comme ceci : 
+
 ```js
 data: {
     premium: true
 }
 ```
 
-Puis :
-
-```js
-computed: {
-    shipping() {
-        if(this.premium) {
-            return 'Free'
-        }
-        return 2.99
-    }
-}
-```
-
-Et donc, dans le HTML/Template :
-```html
-<p>Shipping: {{ shipping }}</p>
-```
-En bref, ça nous permettra de return pas mal de choses en fonction de certains paramètres (si le stock est présent ou non, etc)
+On pourra donc vérifier si l'utilisateur est premium ou non. En guise d'autre exemple, nous pouvons créer un component s'insérant dans un autre component, simplement en le créant et en insérant ce component via les balises HTML.
